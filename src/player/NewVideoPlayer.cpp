@@ -166,20 +166,16 @@ NewVideoPlayer::displayJobCallback (arg_unused (DisplayJob *job),
   guint8 *pixels;
   guint stride;
   
-  SDLWindow *window;
-
   this->lock ();
   
   //g_assert_nonnull(surface);
   if ( sample != NULL ){
-
-    window = surface->getParentWindow ();
     
     if (texture == NULL){
       texture = SDL_CreateTexture (renderer, SDL_PIXELFORMAT_ARGB32,
                                 SDL_TEXTUREACCESS_TARGET, 
-                                surface->getParentWindow ()->getRect().w,
-                                surface->getParentWindow ()->getRect().h);
+                                this->window->getRect().w,
+                                this->window->getRect().h);
       g_assert_nonnull (texture);
       
       this->condDisplayJobSignal ();
@@ -199,8 +195,8 @@ NewVideoPlayer::displayJobCallback (arg_unused (DisplayJob *job),
     stride = GST_VIDEO_FRAME_PLANE_STRIDE (&v_frame, 0);
     g_assert (SDL_UpdateTexture(texture, NULL, pixels, stride) == 0);
   
-    g_assert_nonnull (window);
-    window->setTexture (texture);
+    g_assert_nonnull (this->window);
+    this->window->setTexture (texture);
 
     gst_video_frame_unmap (&v_frame);
 

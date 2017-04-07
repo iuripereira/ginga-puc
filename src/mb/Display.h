@@ -65,6 +65,8 @@ private:
   GList *windows;               // list of windows to be redrawn
   GList *providers;             // list of providers to be redrawn
 
+  GList *players;               //list of players to be redraws
+
   gpointer add (GList **, gpointer);
   gpointer remove (GList **, gpointer);
   gboolean find (GList *, gconstpointer);
@@ -88,6 +90,9 @@ public:
   SDLWindow *createWindow (int, int, int, int, int);
   bool hasWindow (const SDLWindow *);
   void destroyWindow (SDLWindow *);
+
+  void registerPlayer(Player*);
+  void unregisterPlayer(Player*);
 
   IContinuousMediaProvider *createContinuousMediaProvider (const string&);
   void destroyContinuousMediaProvider (IContinuousMediaProvider *);

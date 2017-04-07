@@ -44,7 +44,8 @@ ImagePlayer::displayJobCallback (arg_unused (DisplayJob *job),
   if (unlikely (texture == NULL))
     g_error ("cannot load image file %s: %s", mrl.c_str (),
              IMG_GetError ());
-
+  
+  this->texture = texture;
   this->window->setTexture (texture);
 
   this->condDisplayJobSignal ();

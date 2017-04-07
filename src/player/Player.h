@@ -90,6 +90,9 @@ protected:
   IPlayer *mirrorSrc;
   set<IPlayer *> mirrors;
 
+  SDL_Rect renderArea; 
+  SDL_Texture * texture;
+
   //time attr
   guint32 initStartTime;
   guint32 initPauseTime;
@@ -100,6 +103,8 @@ public:
   Player (const string &mrl);
   virtual ~Player ();
   void setMirrorSrc (IPlayer *mirrorSrc);
+
+  void redraw (SDL_Renderer *); // called only by the render thread
 
 private:
   void addMirror (IPlayer *mirror);

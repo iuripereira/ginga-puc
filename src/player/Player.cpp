@@ -18,6 +18,8 @@ along with Ginga.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "ginga.h"
 #include "Player.h"
 
+
+#include "SDL.h"
 #include "mb/Display.h"
 using namespace ::ginga::mb;
 
@@ -50,17 +52,20 @@ Player::Player (const string &mrl)
   this->outTransTime = -1;
   this->notifyContentUpdate = false;
   this->mirrorSrc = NULL;
+  
+  this->texture=NULL;
 
   this->initStartTime = 0;
   this->initPauseTime = 0;
   this->accTimePlaying = 0;
   this->accTimePaused = 0; 
 
-  
+   Ginga_Display->registerPlayer(this);
 }
 
 Player::~Player ()
 {
+  Ginga_Display->unregisterPlayer(this);
 
   set<IPlayer *>::iterator i;
 
@@ -711,6 +716,7 @@ bool
 Player::setOutWindow (SDLWindow* windowId)
 {
   this->window = windowId;
+  this->renderArea = windowId->getRect();
 
   if (surface != 0 && surface->getParentWindow () == 0)
     {
@@ -722,6 +728,14 @@ Player::setOutWindow (SDLWindow* windowId)
 PLAYER_STATUS 
 Player::getMediaStatus(){
    return this->status;
+}
+
+void 
+Player::redraw (SDL_Renderer * renderer){
+   
+   if(this->texture==NULL)return;
+
+   SDLx_RenderCopy (renderer, this->texture, NULL, &this->renderArea);
 }
 
 GINGA_PLAYER_END

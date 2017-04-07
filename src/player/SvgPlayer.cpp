@@ -106,7 +106,8 @@ SvgPlayer::displayJobCallback (arg_unused (DisplayJob *job),
   g_assert_nonnull (texture);
 
   SDL_FreeSurface (sfc);
-
+  
+  this->texture = texture;
   this->window->setTexture (texture);
 
   this->condDisplayJobSignal ();

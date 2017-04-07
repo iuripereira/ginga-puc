@@ -240,6 +240,19 @@ Display::renderLoop ()
       displayDebug->draw(this->renderer,elapsedTime);
       SDL_RenderPresent (this->renderer);
       this->unlock ();
+/*
+      this->lock ();      //redraw players
+      SDL_SetRenderDrawColor (this->renderer, 255, 0, 255, 255);
+      SDL_RenderClear (this->renderer);
+     // this->windows = g_list_sort (this->windows, (GCompareFunc) win_cmp_z);
+      for (l = this->players; l != NULL; l = l->next)
+        {
+          Player * player = (Player *) l->data;
+          g_assert_nonnull (player);
+        //  if (window->isVisible () && !window->isGhostWindow ())
+            player->redraw (this->renderer);
+        }
+      this->unlock (); */
 
     quit:
       this->lock ();            // destroy dead textures
@@ -294,6 +307,7 @@ Display::Display (int width, int height, bool fullscreen, gdouble fps)
   this->textures = NULL;
   this->windows = NULL;
   this->providers = NULL;
+  this->players = NULL;
 
   checkMutexInit ();            // FIXME
 
@@ -529,6 +543,26 @@ Display::destroyWindow (SDLWindow *win)
     }
   this->remove (&this->windows, win);
   delete win;
+}
+
+void
+Display::registerPlayer(Player* p){
+   
+   g_debug("\n\n Estou me registrando \n\n");
+
+   this->lock ();
+   this->add (&this->players, p);
+   this->unlock ();
+}
+
+void
+Display::unregisterPlayer(Player* p){
+   
+   g_debug("\n\n Estou me disregistrando \n\n");
+
+   this->lock ();
+   this->remove (&this->players, p);
+   this->unlock ();
 }
 
 /**
